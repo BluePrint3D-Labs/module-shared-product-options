@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.form.content">
+            <!-- Preserved: Your original custom shared options injection block -->
+            <block class="BluePrint3D\SharedProductOptions\Block\Product\View\SharedOptions"
+                   name="blueprint3d.shared.product.options"
+                   template="BluePrint3D_SharedProductOptions::product/view/shared_options.phtml"
+                   before="product.info.addtocart">
+                <arguments>
+                    <!-- Inject our new View Model directly into your original block! -->
+                    <argument name="shared_options_helper" xsi:type="object">BluePrint3D\SharedProductOptions\ViewModel\SharedOptions</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="product.info.options.text">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">BluePrint3D_SharedProductOptions::product/view/options/type/text.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <!-- Add our dropdown select override -->
+        <referenceBlock name="product.info.options.select">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">BluePrint3D_SharedProductOptions::product/view/options/type/select.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <!-- FIXED: Initialize the JS Image Switcher Component cleanly using a Text block to bypass template path security validation -->
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Text" name="shared.option.image.switcher">
+                <arguments>
+                    <argument name="text" xsi:type="string"><![CDATA[
+                        <script type="text/x-magento-init">
+                        {
+                            "*": {
+                                "sharedOptionImageSwitcher": {}
+                            }
+                        }
+                        </script>
+                    ]]></argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

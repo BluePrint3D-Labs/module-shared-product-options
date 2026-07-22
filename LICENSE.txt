@@ -1,0 +1,23 @@
+BluePrint3D Ltd - End User License Agreement (EULA)
+
+Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+
+Owned by: BluePrint3D Ltd
+Company Registration Number: 13473806
+Email: support@blueprint3d.co.uk
+
+1. GRANT OF LICENSE
+BluePrint3D Ltd hereby grants you a free, non-exclusive, non-transferable right to download, install, modify, and use this software module for personal or commercial purposes on any web store.
+
+2. OWNERSHIP & INTELLECTUAL PROPERTY
+This software remains the sole intellectual property of BluePrint3D Ltd. This license grants usage rights only; it does not transfer ownership of the source code, design, or any underlying concepts.
+
+3. RESTRICTIONS (STRICTLY PROHIBITED ACTIONS)
+You may freely use this software, but under no circumstances may this software, whether modified or unmodified, be:
+- Resold, sublicensed, or distributed for direct financial gain.
+- Repackaged and sold as part of a commercial product, extension, plugin, or theme.
+- Uploaded to or sold via any commercial extension marketplace.
+- Claimed as your own original work.
+
+4. DISCLAIMER OF WARRANTY
+This software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall BluePrint3D Ltd be liable for any claim, damages, or other liability arising from the use or inability to use this software.

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">blueprint3d_option_group_listing.blueprint3d_option_group_listing_data_source</item>
+        </item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="add">
+                <url path="*/*/new"/>
+                <class>primary</class>
+                <label translate="true">Add New Group</label>
+            </button>
+        </buttons>
+        <spinner>blueprint3d_option_group_columns</spinner>
+        <deps>
+            <dep>blueprint3d_option_group_listing.blueprint3d_option_group_listing_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="blueprint3d_option_group_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">group_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="blueprint3d_option_group_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filters name="listing_filters"/>
+        <paging name="listing_paging"/>
+    </listingToolbar>
+
+    <columns name="blueprint3d_option_group_columns">
+        <column name="group_id" sortOrder="10">
+            <settings>
+                <filter>textRange</filter>
+                <label translate="true">ID</label>
+                <sorting>asc</sorting>
+            </settings>
+        </column>
+
+        <column name="title" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Group Title</label>
+            </settings>
+        </column>
+        <actionsColumn name="actions" class="BluePrint3D\SharedProductOptions\Ui\Component\Listing\Column\GroupActions" sortOrder="30">
+            <settings>
+                <indexField>group_id</indexField>
+                <label translate="true">Action</label>
+            </settings>
+        </actionsColumn>
+    </columns>
+</listing>

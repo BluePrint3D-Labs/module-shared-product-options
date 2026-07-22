@@ -1,0 +1,28 @@
+<?php
+/** @var \BluePrint3D\SharedProductOptions\Block\Cart\AdditionalInfo $block */
+
+// Fallback logic to grab the item from parent blocks if not directly set
+$item = $block->getItem();
+if (!$item && $block->getParentBlock()) {
+    $item = $block->getParentBlock()->getItem();
+    $block->setItem($item);
+}
+
+$optionsList = $block->getSharedOptionsList();
+?>
+
+<?php if (!empty($optionsList)): ?>
+    <div class="blueprint3d-shared-options" style="margin-top: 8px; margin-bottom: 8px;">
+        <dl class="item-options" style="margin: 0; padding: 0;">
+            <?php foreach ($optionsList as $option): ?>
+                <dt class="label" style="font-weight: 600; float: left; clear: left; margin-right: 5px; margin-bottom: 2px;">
+                    <?= $block->escapeHtml($option['label']) ?>:
+                </dt>
+                <dd class="value" style="float: left; margin: 0 0 2px 0;">
+                    <?= $block->escapeHtml($option['value']) ?>
+                </dd>
+            <?php endforeach; ?>
+        </dl>
+        <div style="clear: both;"></div>
+    </div>
+<?php endif; ?>

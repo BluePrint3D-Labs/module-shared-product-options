@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">blueprint3d_option_group_form.blueprint3d_option_group_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Group Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+
+    <settings>
+        <buttons>
+            <button name="save" class="BluePrint3D\SharedProductOptions\Block\Adminhtml\Group\Edit\SaveButton"/>
+            <button name="delete" class="BluePrint3D\SharedProductOptions\Block\Adminhtml\Group\Edit\DeleteButton"/>
+            <button name="back">
+                <url path="*/*/"/>
+                <label translate="true">Back</label>
+            </button>
+        </buttons>
+        <namespace>blueprint3d_option_group_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>blueprint3d_option_group_form.blueprint3d_option_group_form_data_source</dep>
+        </deps>
+    </settings>
+
+    <dataSource name="blueprint3d_option_group_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="blueprint3d_options/group/save"/>
+        </settings>
+        <dataProvider class="BluePrint3D\SharedProductOptions\Model\Group\DataProvider" name="blueprint3d_option_group_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>group_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <fieldset name="general">
+        <settings>
+            <label translate="true">General Settings</label>
+        </settings>
+
+        <field name="group_id" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+                <dataScope>group_id</dataScope>
+            </settings>
+        </field>
+
+        <field name="title" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Group Title</label>
+                <dataScope>title</dataScope>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+
+    <fieldset name="options" sortOrder="20">
+        <settings>
+            <label translate="true">Option Values / Rows</label>
+        </settings>
+
+        <htmlContent name="stacked_layout_css_injector">
+            <block class="Magento\Framework\View\Element\Text" name="blueprint3d.options.layout.css">
+                <arguments>
+                    <argument name="text" xsi:type="string"><![CDATA[
+                        <style>
+/* 1. Hide the completely broken, detached top main table header row */
+.admin__dynamic-rows[data-index="option_values"] > thead {
+    display: none !important;
+}
+
+/* 2. Target ONLY the top-level rows & apply your custom background color */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+    background-color: #eff0f0 !important; /* Added per your console test */
+    align-items: flex-end !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* 3. Strip raw table cell behaviors safely on the outer row only */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    box-sizing: border-box !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td[style*="display: none"] {
+    display: none !important;
+}
+
+/* 4. Position individual fields nicely along the flex row line */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td.col-draggable {
+    order: 1 !important;
+    padding-bottom: 6px !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="type"]) {
+    flex: 1 1 15% !important;
+    min-width: 140px !important;
+    order: 2 !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="title"]) {
+    flex: 2 1 35% !important;
+    min-width: 220px !important;
+    order: 3 !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="price"]) {
+    flex: 1 1 12% !important;
+    min-width: 100px !important;
+    order: 4 !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="sku"]) {
+    flex: 1 1 15% !important;
+    min-width: 130px !important;
+    order: 5 !important;
+}
+/* CUSTOM INSERTION: Beautifully format the placeholder layout field column */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="placeholder"]) {
+    flex: 1 1 20% !important;
+    min-width: 180px !important;
+    order: 6 !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="is_required"]) {
+    flex: 0 0 100px !important;
+    order: 7 !important; /* Bumped order index up to accommodate placeholder */
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has(.action-delete) {
+    flex: 0 0 40px !important;
+    order: 8 !important; /* Bumped order index up to accommodate placeholder */
+    padding-bottom: 4px !important;
+    text-align: center !important;
+}
+
+/* 5. Force the sub-values container layout smoothly to its own clear line at the bottom */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td:has([data-index="values"]) {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    order: 20 !important;
+    margin-top: 12px !important;
+}
+
+/* 6. Strict child targeting for outer inline labels ONLY */
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td > .admin__field > .admin__field-label {
+    display: block !important;
+    margin-bottom: 6px !important;
+    text-align: left !important;
+}
+.admin__dynamic-rows[data-index="option_values"] > tbody > tr.data-row > td > .admin__field > .admin__field-label span {
+    font-weight: 600 !important;
+    color: #41362f !important;
+    font-size: 1.2rem !important;
+}
+
+/* 7. Completely eliminate the leaked/duplicate text labels inside the inner subgrid */
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] .admin__field-label {
+    display: none !important;
+}
+
+/* 8. Inner values grid wrapper modification (dropped background and borders per your rules) */
+.admin__dynamic-rows[data-index="option_values"] tr.data-row [data-index="values"] {
+    padding: 14px !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    /* background, border, and border-left removed */
+}
+.admin__dynamic-rows[data-index="option_values"] tr.data-row [data-index="values"] .admin__control-table-wrapper {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important; /* Keeps the internal table structural border clean */
+}
+
+/* 9. Reset the entire inner table structure to native table rules (Aligns headers + inputs) */
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows thead {
+    display: table-header-group !important;
+}
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows tr {
+    display: table-row !important;
+}
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows th,
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows td {
+    display: table-cell !important;
+    padding: 8px 10px !important;
+    vertical-align: middle !important;
+    text-align: left !important;
+    border: none !important;
+}
+.admin__dynamic-rows[data-index="option_values"] [data-index="values"] table.admin__dynamic-rows th {
+    font-weight: 600 !important;
+    color: #41362f !important;
+}
+                        </style>
+                    ]]></argument>
+                </arguments>
+            </block>
+        </htmlContent>
+
+        <dynamicRows name="option_values" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
+            <settings>
+                <addButtonLabel translate="true">Add New Option Row</addButtonLabel>
+                <defaultRecord>false</defaultRecord>
+                <recordTemplate>record</recordTemplate>
+                <identificationProperty>item_id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">true</param>
+                    <param name="template" xsi:type="string">ui/dynamic-rows/cells/dnd</param>
+                </dndConfig>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="additionalClasses" xsi:type="string">blueprint3d-stacked-record</item>
+                    </item>
+                </argument>
+
+                <field name="item_id" formElement="input" sortOrder="10">
+                    <settings>
+                        <dataType>text</dataType>
+                        <visible>false</visible>
+                        <dataScope>item_id</dataScope>
+                    </settings>
+                </field>
+
+                <field name="position" formElement="input" sortOrder="15">
+                    <settings>
+                        <dataType>text</dataType>
+                        <visible>false</visible>
+                        <dataScope>position</dataScope>
+                    </settings>
+                </field>
+
+                <field name="type" formElement="select" component="Magento_Ui/js/form/element/select" sortOrder="18">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="array">
+                            <item name="field" xsi:type="array">
+                                <item name="value" xsi:type="string">field</item>
+                                <item name="label" xsi:type="string" translate="true">Text Field</item>
+                            </item>
+                            <item name="area" xsi:type="array">
+                                <item name="value" xsi:type="string">area</item>
+                                <item name="label" xsi:type="string" translate="true">Text Area</item>
+                            </item>
+                            <item name="drop_down" xsi:type="array">
+                                <item name="value" xsi:type="string">drop_down</item>
+                                <item name="label" xsi:type="string" translate="true">Dropdown</item>
+                            </item>
+                            <item name="multiple" xsi:type="array">
+                                <item name="value" xsi:type="string">multiple</item>
+                                <item name="label" xsi:type="string" translate="true">Multiple Select</item>
+                            </item>
+                            <item name="date" xsi:type="array">
+                                <item name="value" xsi:type="string">date</item>
+                                <item name="label" xsi:type="string" translate="true">Date</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Option Type</label>
+                        <dataScope>type</dataScope>
+                        <switcherConfig>
+                            <rules>
+                                <rule name="0">
+                                    <value>field</value>
+                                    <actions>
+                                        <action name="0">
+                                            <target>${ $.parentName }.values</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                        <action name="1">
+                                            <target>${ $.parentName }.placeholder</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">true</param>
+                                            </params>
+                                        </action>
+                                    </actions>
+                                </rule>
+                                <rule name="1">
+                                    <value>area</value>
+                                    <actions>
+                                        <action name="0">
+                                            <target>${ $.parentName }.values</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                        <action name="1">
+                                            <target>${ $.parentName }.placeholder</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">true</param>
+                                            </params>
+                                        </action>
+                                    </actions>
+                                </rule>
+                                <rule name="2">
+                                    <value>drop_down</value>
+                                    <actions>
+                                        <action name="0">
+                                            <target>${ $.parentName }.values</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">true</param>
+                                            </params>
+                                        </action>
+                                        <action name="1">
+                                            <target>${ $.parentName }.placeholder</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                    </actions>
+                                </rule>
+                                <rule name="3">
+                                    <value>multiple</value>
+                                    <actions>
+                                        <action name="0">
+                                            <target>${ $.parentName }.values</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">true</param>
+                                            </params>
+                                        </action>
+                                        <action name="1">
+                                            <target>${ $.parentName }.placeholder</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                    </actions>
+                                </rule>
+                                <rule name="4">
+                                    <value>date</value>
+                                    <actions>
+                                        <action name="0">
+                                            <target>${ $.parentName }.values</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                        <action name="1">
+                                            <target>${ $.parentName }.placeholder</target>
+                                            <callback>visible</callback>
+                                            <params>
+                                                <param name="0" xsi:type="boolean">false</param>
+                                            </params>
+                                        </action>
+                                    </actions>
+                                </rule>
+                            </rules>
+                            <enabled>true</enabled>
+                        </switcherConfig>
+                    </settings>
+                </field>
+
+                <field name="title" formElement="input" sortOrder="20">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Option Value Title</label>
+                        <dataScope>title</dataScope>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                    </settings>
+                </field>
+
+                <field name="price" formElement="input" sortOrder="30">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Price Modifier</label>
+                        <dataScope>price</dataScope>
+                        <validation>
+                            <rule name="validate-number" xsi:type="boolean">true</rule>
+                        </validation>
+                    </settings>
+                </field>
+
+                <field name="sku" formElement="input" sortOrder="40">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">SKU Modifier</label>
+                        <dataScope>sku</dataScope>
+                    </settings>
+                </field>
+
+                <!-- DYNAMICALLY INJECTED PLACEHOLDER FIELD: Fits right into the grid after SKU -->
+                <field name="placeholder" formElement="input" sortOrder="42">
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Placeholder Text</label>
+                        <dataScope>placeholder</dataScope>
+                        <notice translate="true">Instructions shown inside the box (e.g. "e.g. Mike Shinoda")</notice>
+                    </settings>
+                </field>
+
+                <dynamicRows name="values" component="Magento_Ui/js/dynamic-rows/dynamic-rows" sortOrder="45">
+                    <settings>
+                        <addButtonLabel translate="true">Add Value Option</addButtonLabel>
+                        <defaultRecord>false</defaultRecord>
+                        <recordTemplate>value_record</recordTemplate>
+                        <identificationProperty>value_id</identificationProperty>
+                        <visible>false</visible>
+                        <dataScope>values</dataScope>
+                    </settings>
+                    <container name="value_record" component="Magento_Ui/js/dynamic-rows/record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                            </item>
+                        </argument>
+                        <field name="value_id" formElement="input" sortOrder="10">
+                            <settings>
+                                <dataType>text</dataType>
+                                <visible>false</visible>
+                                <dataScope>value_id</dataScope>
+                            </settings>
+                        </field>
+                        <field name="title" formElement="input" sortOrder="20">
+                            <settings>
+                                <dataType>text</dataType>
+                                <label translate="true">Option Value Label</label>
+                                <dataScope>title</dataScope>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                            </settings>
+                        </field>
+                        <field name="price" formElement="input" sortOrder="30">
+                            <settings>
+                                <dataType>text</dataType>
+                                <label translate="true">Price Delta</label>
+                                <dataScope>price</dataScope>
+                            </settings>
+                        </field>
+                        <actionDelete name="action_delete" sortOrder="40">
+                            <settings>
+                                <label translate="true">Delete Value</label>
+                                <dataType>text</dataType>
+                            </settings>
+                        </actionDelete>
+                    </container>
+                </dynamicRows>
+
+                <field name="is_required" formElement="select" component="Magento_Ui/js/form/element/select" sortOrder="48">
+                    <argument name="data" xsi:type="array">
+                        <item name="options" xsi:type="array">
+                            <item name="no" xsi:type="array">
+                                <item name="value" xsi:type="string">0</item>
+                                <item name="label" xsi:type="string" translate="true">No</item>
+                            </item>
+                            <item name="yes" xsi:type="array">
+                                <item name="value" xsi:type="string">1</item>
+                                <item name="label" xsi:type="string" translate="true">Yes</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Required</label>
+                        <dataScope>is_required</dataScope>
+                    </settings>
+                </field>
+
+                <actionDelete name="action_delete" sortOrder="50">
+                    <settings>
+                        <label translate="true">Delete</label>
+                        <dataType>text</dataType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+</form>

@@ -1,0 +1,86 @@
+<?php
+/** @var \BluePrint3D\SharedProductOptions\Block\Product\View\SharedOptions $block */
+/** @var \BluePrint3D\SharedProductOptions\ViewModel\SharedOptions $viewModel */
+
+// Grab our custom options data engine injected via Layout arguments
+$viewModel = $block->getData('shared_options_helper');
+
+// TODO: Replace this fallback integer with your custom product entity/attribute group ID loading hook
+$assignedGroupId = 1;
+
+$options = $viewModel ? $viewModel->getOptionsByGroupId($assignedGroupId) : [];
+?>
+
+<?php if (!empty($options)): ?>
+    <div class="blueprint3d-shared-options-container options-list" style="margin: 20px 0; padding: 15px 0; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5;">
+        <?php foreach ($options as $option): ?>
+            <?php
+            $htmlId = 'shared-option-' . $option['id'];
+            $inputName = 'blueprint3d_options[' . $option['id'] . ']';
+            $isRequired = (bool)$option['is_required'];
+            $requiredValidationAttribute = $isRequired ? ' data-validate="{required:true}"' : '';
+            ?>
+
+            <div class="field option field-shared-option-<?= $option['id'] ?> <?= $isRequired ? 'required' : '' ?>" style="margin-bottom: 15px;">
+                <label class="label" for="<?= $htmlId ?>" style="font-weight: 600; display: block; margin-bottom: 5px;">
+                    <span><?= $block->escapeHtml($option['title']) ?></span>
+                    <?php if ($option['price'] > 0): ?>
+                        <span class="price-notice" style="font-weight: normal; font-size: 0.9em; color: #666;">
+                        (+<?= /* @noEscape */ $block->escapeHtml(number_format($option['price'], 2)) ?>)
+                    </span>
+                    <?php endif; ?>
+                </label>
+
+                <div class="control">
+                    <?php if ($option['type'] === 'field'): ?>
+                        <input type="text"
+                               id="<?= $htmlId ?>"
+                               name="<?= $inputName ?>"
+                               class="input-text"
+                                <?= $requiredValidationAttribute ?> />
+
+                    <?php elseif ($option['type'] === 'area'): ?>
+                        <textarea id="<?= $htmlId ?>"
+                                  name="<?= $inputName ?>"
+                                  class="textarea"
+                                  rows="3"
+                              <?= $requiredValidationAttribute ?>></textarea>
+
+                    <?php elseif ($option['type'] === 'drop_down'): ?>
+                        <select id="<?= $htmlId ?>"
+                                name="<?= $inputName ?>"
+                                class="select"
+                                <?= $requiredValidationAttribute ?>>
+                            <option value=""><?= $block->escapeHtml(__('-- Please Select --')) ?></option>
+                            <?php foreach ($option['values'] as $val): ?>
+                                <option value="<?= $val['id'] ?>">
+                                    <?= $block->escapeHtml($val['title']) ?>
+                                    <?php if ($val['price'] > 0): ?>
+                                        (+<?= /* @noEscape */ number_format($val['price'], 2) ?>)
+                                    <?php endif; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+
+                    <?php elseif ($option['type'] === 'multiple'): ?>
+                        <select id="<?= $htmlId ?>"
+                                name="<?= $inputName ?>[]"
+                                class="multiselect"
+                                multiple="multiple"
+                                size="5"
+                                <?= $requiredValidationAttribute ?>>
+                            <?php foreach ($option['values'] as $val): ?>
+                                <option value="<?= $val['id'] ?>">
+                                    <?= $block->escapeHtml($val['title']) ?>
+                                    <?php if ($val['price'] > 0): ?>
+                                        (+<?= /* @noEscape */ number_format($val['price'], 2) ?>)
+                                    <?php endif; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>

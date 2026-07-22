@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- UI Component Grid Data Source (Do not touch!) -->
+    <virtualType name="BluePrint3D\SharedProductOptions\Model\ResourceModel\Group\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">blueprint3d_shared_option_group</argument>
+            <argument name="resourceModel" xsi:type="string">BluePrint3D\SharedProductOptions\Model\ResourceModel\Group</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="blueprint3d_option_group_listing_data_source" xsi:type="string">BluePrint3D\SharedProductOptions\Model\ResourceModel\Group\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Product Save Plugin (Do not touch!) -->
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="blueprint3d_save_shared_options" type="BluePrint3D\SharedProductOptions\Plugin\ProductSavePlugin"/>
+    </type>
+
+    <!-- GLOBAL FRONTEND/API OPTION INJECTOR -->
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="blueprint3d_shared_options_injector_global"
+                type="BluePrint3D\SharedProductOptions\Plugin\InjectSharedOptionsBlock"
+                sortOrder="10"/>
+    </type>
+
+    <!-- NEW: Intercept cart preparation to force option pre-hydration before native validation checks -->
+    <type name="Magento\Catalog\Model\Product\Type\AbstractType">
+        <plugin name="blueprint3d_shared_product_options_cart_prehydrate"
+                type="BluePrint3D\SharedProductOptions\Plugin\PreHydrateCartOptions"
+                sortOrder="10"/>
+    </type>
+</config>

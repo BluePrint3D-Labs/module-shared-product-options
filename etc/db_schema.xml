@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/db_schema.xsd">
+
+    <!-- 1. Groups Parent Table -->
+    <table name="blueprint3d_shared_option_group" resource="default" engine="innodb" comment="Blueprint3D Shared Option Groups Parent Table">
+        <column xsi:type="int" name="group_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Group Primary Key ID"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="false" comment="Option Group Title"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="group_id"/>
+        </constraint>
+    </table>
+
+    <!-- 2. Individual Items/Values Rows Table -->
+    <table name="blueprint3d_shared_option_item" resource="default" engine="innodb" comment="Blueprint3D Shared Individual Option Values Rows Table">
+        <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Option Primary Key ID"/>
+        <column xsi:type="int" name="group_id" padding="10" unsigned="true" nullable="false" comment="Parent Group Foreign Key Relationship ID"/>
+        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" default="0" comment="Parent Option Item ID for Hierarchical Dropdowns"/>
+        <column xsi:type="varchar" name="type" length="50" nullable="false" default="field" comment="Option Input Type"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="false" comment="Individual Row Option Value Title"/>
+        <column xsi:type="decimal" name="price_modifier" scale="4" precision="12" nullable="false" default="0.0000" comment="Row Price Modifier Value Amount"/>
+        <column xsi:type="varchar" name="sku_modifier" length="255" nullable="true" comment="Row SKU Modifier String Identification"/>
+        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" default="0" comment="Sort Order"/>
+        <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="false" identity="false" default="0" comment="Is Option Required Flag"/>
+        <column xsi:type="varchar" name="placeholder" length="255" nullable="true" comment="Placeholder Text"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="item_id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="FK_SHARED_OPTION_ITEM_GROUP_ID"
+                    table="blueprint3d_shared_option_item"
+                    column="group_id"
+                    referenceTable="blueprint3d_shared_option_group"
+                    referenceColumn="group_id"
+                    onDelete="CASCADE"/>
+    </table>
+
+    <!-- 3. Product Mapping Intersection Table -->
+    <table name="blueprint3d_shared_option_product" resource="default" engine="innodb" comment="Blueprint3D Shared Option Product Mappings Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Mapping Primary Key ID"/>
+        <column xsi:type="int" name="group_id" padding="10" unsigned="true" nullable="false" comment="Shared Option Group Foreign Key ID"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Magento Core Catalog Product Entity ID"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="FK_BLUPRNT_SHRD_OPT_PRDCT_GRP_ID"
+                    table="blueprint3d_shared_option_product"
+                    column="group_id"
+                    referenceTable="blueprint3d_shared_option_group"
+                    referenceColumn="group_id"
+                    onDelete="CASCADE"/>
+
+        <constraint xsi:type="foreign" referenceId="FK_BLUPRNT_SHRD_OPT_PRDCT_PRDCT_ID"
+                    table="blueprint3d_shared_option_product"
+                    column="product_id"
+                    referenceTable="catalog_product_entity"
+                    referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+    </table>
+
+</schema>

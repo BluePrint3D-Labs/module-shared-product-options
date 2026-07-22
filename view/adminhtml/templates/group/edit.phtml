@@ -1,0 +1,22 @@
+<?php
+/** @var \Magento\Backend\Block\Template $block */
+$id = $block->getRequest()->getParam('id');
+$formKey = $block->getFormKey();
+?>
+<div class="content-header">
+    <h2>Shared Product Options Group - Reset Baseline Test</h2>
+</div>
+
+<form action="<?= $block->getUrl('blueprint3d_options/group/save') ?>" method="post" style="background:#fff; padding:20px; border:1px solid #ccc;">
+    <input name="form_key" type="hidden" value="<?= $formKey ?>" />
+    <input name="id" type="hidden" value="<?= htmlspecialchars($id) ?>" />
+
+    <div style="margin-bottom: 15px;">
+        <label style="display:block; font-weight:bold; margin-bottom:5px;">Group Title:</label>
+        <input type="text" name="title" value="" style="width:300px; padding:5px; border:1px solid #aaa;" required />
+    </div>
+
+    <button type="submit" class="action-save primary" style="padding:7px 15px; background:#eb5202; color:#fff; border:none; cursor:pointer;">
+        Save Baseline
+    </button>
+</form>

@@ -1,0 +1,47 @@
+<?php
+/** @var $block \Magento\Catalog\Block\Product\View\Options\Type\Select */
+$_option = $block->getOption();
+$_class = ($_option->getIsRequire()) ? ' required' : '';
+?>
+<div class="field<?= /* @noEscape */ $_class ?>">
+    <label class="label" for="select_<?= $block->escapeHtmlAttr($_option->getId()) ?>">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <?= /* @noEscape */ $block->getFormattedPrice() ?>
+    </label>
+    <div class="control">
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN): ?>
+            <select name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                    id="select_<?= $block->escapeHtmlAttr($_option->getId()) ?>"
+                    class="product-custom-option admin__control-select"
+                    data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                    <?php if ($_option->getIsRequire()): ?>data-validate="{required:true}"<?php endif; ?>>
+                <option value=""><?= $block->escapeHtml(__('-- Please Choose --')) ?></option>
+                <?php foreach ($_option->getValues() as $_value): ?>
+                    <option value="<?= $block->escapeHtmlAttr($_value->getOptionTypeId()) ?>"
+                            data-option-label="<?= $block->escapeHtmlAttr($_value->getTitle()) ?>">
+                        <?= $block->escapeHtml($_value->getTitle()) ?>
+                        <?= /* @noEscape */ $block->getFormattedPrice($_value) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_RADIO): ?>
+            <!-- Retain native radio options just in case -->
+            <div class="options-list nested" id="options-<?= $block->escapeHtmlAttr($_option->getId()) ?>-list">
+                <?php foreach ($_option->getValues() as $_value): ?>
+                    <div class="field choice">
+                        <input type="radio"
+                               class="product-custom-option change-container-classname"
+                               name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               value="<?= $block->escapeHtmlAttr($_value->getOptionTypeId()) ?>"
+                               data-option-label="<?= $block->escapeHtmlAttr($_value->getTitle()) ?>"
+                               <?php if ($_option->getIsRequire()): ?>data-validate="{required:true}"<?php endif; ?> />
+                        <label class="label">
+                            <span><?= $block->escapeHtml($_value->getTitle()) ?></span>
+                            <?= /* @noEscape */ $block->getFormattedPrice($_value) ?>
+                        </label>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

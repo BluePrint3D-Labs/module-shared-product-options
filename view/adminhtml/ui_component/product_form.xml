@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <!-- 1. Intercept and hide the old single-select dropdown attribute -->
+    <field name="shared_option_group_id" formElement="hidden">
+        <settings>
+            <dataType>text</dataType>
+            <visible>false</visible>
+            <dataScope>shared_option_group_id</dataScope>
+        </settings>
+    </field>
+
+    <!-- 2. Instantiate the advanced, checkbox category-style field section -->
+    <fieldset name="container_shared_options" sortOrder="100">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Blueprint3D Shared Options</label>
+        </settings>
+        <field name="shared_option_groups" component="Magento_Ui/js/form/element/ui-select" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">true</item>
+                    <item name="showCheckbox" xsi:type="boolean">true</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="levelsVisibility" xsi:type="number">1</item>
+                    <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Select Option Groups</label>
+                <!-- THE BRIDGING LINK: Maps the field directly into Magento's form POST payload -->
+                <dataScope>data.product.shared_option_groups</dataScope>
+                <componentType>field</componentType>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="BluePrint3D\SharedProductOptions\Model\Config\Source\GroupOptions"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

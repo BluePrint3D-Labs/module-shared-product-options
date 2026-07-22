@@ -1,0 +1,34 @@
+<?php
+/** @var $block \Magento\Catalog\Block\Product\View\Options\Type\Text */
+$_option = $block->getOption();
+$_class = ($_option->getIsRequire()) ? ' required' : '';
+$placeholder = $_option->getData('placeholder');
+?>
+<div class="field<?= /* @noEscape */ $_class ?>">
+    <label class="label" for="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text">
+        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <?= /* @noEscape */ $block->getFormattedPrice() ?>
+    </label>
+
+    <div class="control">
+        <?php if ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
+            <input type="text"
+                   id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
+                   class="input-text<?= $_option->getIsRequire() ? ' required-entry' : '' ?> product-custom-option"
+                   <?php if ($_option->getMaxCharacters()): ?>maxlength="<?= (int)$_option->getMaxCharacters() ?>"<?php endif; ?>
+                   name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                   data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                   value="<?= $block->escapeHtmlAttr($block->getDefaultValue()) ?>"
+                   <?php if ($placeholder): ?>placeholder="<?= $block->escapeHtmlAttr($placeholder) ?>"<?php endif; ?> />
+        <?php elseif ($_option->getType() == \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
+            <textarea id="options_<?= $block->escapeHtmlAttr($_option->getId()) ?>_text"
+                      class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>"
+                      <?php if ($_option->getMaxCharacters()): ?>maxlength="<?= (int)$_option->getMaxCharacters() ?>"<?php endif; ?>
+                      name="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                      data-selector="options[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                      rows="5"
+                      cols="25"
+                      <?php if ($placeholder): ?>placeholder="<?= $block->escapeHtmlAttr($placeholder) ?>"<?php endif; ?>><?= $block->escapeHtml($block->getDefaultValue()) ?></textarea>
+        <?php endif; ?>
+    </div>
+</div>

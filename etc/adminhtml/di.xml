@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
+ * 
+ * This software is provided free of charge for personal or commercial use.
+ * Resale, redistribution, or sublicensing of this source code, modified or 
+ * unmodified, for direct financial gain is strictly prohibited.
+ *
+ * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
+ * @license   Custom Proprietary EULA (See LICENSE.txt)
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Plugin to load selected multi-select values when opening the product page -->
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ProductDataProvider">
+        <plugin name="blueprint3d_load_shared_options" type="BluePrint3D\SharedProductOptions\Plugin\ProductDataProviderPlugin"/>
+    </type>
+    <!-- Cache invalidator for Group updates and deletions -->
+    <type name="BluePrint3D\SharedProductOptions\Model\ResourceModel\Group">
+        <plugin name="blueprint3d_shared_options_group_cache_invalidator"
+                type="BluePrint3D\SharedProductOptions\Plugin\CacheInvalidatorPlugin"
+                sortOrder="10"/>
+    </type>
+    <!-- Cache invalidator for Option / Sub-option updates and deletions -->
+    <type name="BluePrint3D\SharedProductOptions\Model\ResourceModel\Option">
+        <plugin name="blueprint3d_shared_options_option_cache_invalidator"
+                type="BluePrint3D\SharedProductOptions\Plugin\CacheInvalidatorPlugin"
+                sortOrder="15"/>
+    </type>
+</config>
