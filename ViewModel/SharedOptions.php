@@ -6,7 +6,7 @@
  * Resale, redistribution, or sublicensing of this source code, modified or 
  * unmodified, for direct financial gain is strictly prohibited.
  *
- * @author    BluePrint3D Ltd <support@blueprint3d.co.uk>
+ * @author    BluePrint3D Ltd <support@blueprint3d.dev>
  * @copyright 2026 BluePrint3D Ltd (Company No. 13473806)
  * @license   Custom Proprietary EULA (See LICENSE.txt)
  */

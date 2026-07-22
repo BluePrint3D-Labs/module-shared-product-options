@@ -64,5 +64,5 @@ php bin/magento cache:flush</code></pre>
 
 <p>
     <strong>Owned by:</strong> BluePrint3D Ltd (Company Registration Number: 13473806)<br />
-    <strong>Email:</strong> <a href="mailto:support@blueprint3d.co.uk">support@blueprint3d.co.uk</a>
+    <strong>Email:</strong> <a href="mailto:support@blueprint3d.dev">support@blueprint3d.dev</a>
 </p>
